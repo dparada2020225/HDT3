@@ -125,11 +125,11 @@
          String csvFilePath = "ResultadosOrdenamiento.csv";
          try (FileWriter writer = new FileWriter(csvFilePath, true)) {
              writer.append(algorithm)
-                   .append(",")
+                   .append(";")
                    .append(dataType)
-                   .append(",")
+                   .append(";")
                    .append(String.valueOf(numCount))
-                   .append(",")
+                   .append(";")
                    .append(String.valueOf(timeTaken))
                    .append("\n");
              System.out.println("Resultados guardados en " + csvFilePath);
