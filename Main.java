@@ -4,19 +4,29 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         try {
-            String filePath = "numeros.txt";
-            FileHandler.generateRandomNumbers(filePath, 3000);
-            List<Integer> numbers = FileHandler.readNumbersFromFile(filePath);
+            Scanner scanner = new Scanner(System.in);
 
+            // Solicitar al usuario la cantidad de números
+            System.out.print("Ingrese la cantidad de números a ordenar: ");
+            int numCount = scanner.nextInt();
+
+            // Generar números aleatorios y guardarlos en el archivo 'numerosAleatorios.csv'
+            String randomFilePath = "numerosAleatorios.csv";
+            FileHandler.generateRandomNumbersCSV(randomFilePath, numCount);
+
+            // Leer los números aleatorios del archivo
+            List<Integer> numbers = FileHandler.readNumbersFromCSV(randomFilePath);
+
+            // Crear un arreglo ordenado y guardarlo en 'numerosOrdenados.csv'
             Integer[] arrayRandom = numbers.toArray(new Integer[0]);
-            Integer[] arraySorted = new Integer[3000];
-            for (int i = 0; i < 3000; i++) {
+            Integer[] arraySorted = new Integer[numCount];
+            for (int i = 0; i < numCount; i++) {
                 arraySorted[i] = i;
             }
+            FileHandler.writeNumbersToCSV("numerosOrdenados.csv", arraySorted);
 
-            Scanner scanner = new Scanner(System.in);
+            // Menú interactivo
             boolean running = true;
-
             while (running) {
                 System.out.println("\n--- Menú ---");
                 System.out.println("1. Mostrar números aleatorios");
@@ -40,19 +50,19 @@ public class Main {
                         System.out.println(Arrays.toString(arraySorted));
                         break;
                     case 3:
-                        executeSort(arrayRandom, arraySorted, scanner, SortAlgorithms::insertionSort, "Insertion Sort");
+                        executeSort(arrayRandom, arraySorted, numCount, scanner, SortAlgorithms::insertionSort, "Insertion Sort");
                         break;
                     case 4:
-                        executeSort(arrayRandom, arraySorted, scanner, (arr) -> SortAlgorithms.mergeSort(arr, 0, arr.length - 1), "Merge Sort");
+                        executeSort(arrayRandom, arraySorted, numCount, scanner, (arr) -> SortAlgorithms.mergeSort(arr, 0, arr.length - 1), "Merge Sort");
                         break;
                     case 5:
-                        executeSort(arrayRandom, arraySorted, scanner, (arr) -> SortAlgorithms.quickSort(arr, 0, arr.length - 1), "Quick Sort");
+                        executeSort(arrayRandom, arraySorted, numCount, scanner, (arr) -> SortAlgorithms.quickSort(arr, 0, arr.length - 1), "Quick Sort");
                         break;
                     case 6:
-                        executeSort(arrayRandom, arraySorted, scanner, SortAlgorithms::radixSort, "Radix Sort");
+                        executeSort(arrayRandom, arraySorted, numCount, scanner, SortAlgorithms::radixSort, "Radix Sort");
                         break;
                     case 7:
-                        executeSort(arrayRandom, arraySorted, scanner, SortAlgorithms::heapSort, "Heap Sort");
+                        executeSort(arrayRandom, arraySorted, numCount, scanner, SortAlgorithms::heapSort, "Heap Sort");
                         break;
                     case 8:
                         running = false;
@@ -68,7 +78,7 @@ public class Main {
         }
     }
 
-    private static void executeSort(Integer[] arrayRandom, Integer[] arraySorted, Scanner scanner, SortFunction sortFunction, String sortName) {
+    private static void executeSort(Integer[] arrayRandom, Integer[] arraySorted, int numCount, Scanner scanner, SortFunction sortFunction, String sortName) {
         System.out.println("\nSeleccione los datos a ordenar:");
         System.out.println("1. Números aleatorios");
         System.out.println("2. Números ordenados");
@@ -80,15 +90,17 @@ public class Main {
         System.out.println("Resultado: " + Arrays.toString(arrayToSort));
         System.out.println(sortName + " completado. Tiempo de ejecución: " + timeTaken + " nanosegundos");
 
-        saveResultsToCSV(sortName, dataChoice == 1 ? "Aleatorios" : "Ordenados", timeTaken);
+        saveResultsToCSV(sortName, dataChoice == 1 ? "Aleatorios" : "Ordenados", timeTaken, numCount);
     }
 
-    private static void saveResultsToCSV(String algorithm, String dataType, long timeTaken) {
+    private static void saveResultsToCSV(String algorithm, String dataType, long timeTaken, int numCount) {
         String csvFilePath = "ResultadosOrdenamiento.csv";
         try (FileWriter writer = new FileWriter(csvFilePath, true)) {
             writer.append(algorithm)
                   .append(",")
                   .append(dataType)
+                  .append(",")
+                  .append(String.valueOf(numCount))
                   .append(",")
                   .append(String.valueOf(timeTaken))
                   .append("\n");
