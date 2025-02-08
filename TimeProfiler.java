@@ -1,7 +1,7 @@
 /**
  * Universidad del Valle de Guatemala
  * Departamento de Ciencia de la Computación
- * Autor: Denil José Parada Cabrera - 24761, Joel Nerio, Jose Rivera
+ * Autor: Denil José Parada Cabrera - 24761, Joel Nerio-24253, Jose Rivera
  * Fecha: [Fecha actual]
  * Descripción: Clase que permite medir el tiempo de ejecución de métodos de ordenamiento.
  */
